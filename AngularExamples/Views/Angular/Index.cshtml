@@ -1,0 +1,68 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<div ng-app="myApp" ng-controller="MainController as main">
+
+    <div>
+        <a ui-sref="home" class="btn btn-primary">Home</a>
+        <a ui-sref="about" class="btn btn-primary">About</a>        
+    </div>
+
+    <!-- Main view -->
+    <div ui-view></div>
+    <hr/>
+    <audio preload="auto" id="music-player" style="width: 100%" controls>
+        <source src="@Url.Content("~/Content/audio/bong-hong-thuy-tinh.mp3")" type="audio/mp3">
+    </audio>
+</div>
+@section scripts {
+    <script>
+        var app = angular.module("myApp", ['ui.router']);
+        // config
+        function config($stateProvider, $urlRouterProvider) {
+            $urlRouterProvider.otherwise("/angular/home");
+
+            $stateProvider
+                .state('home', {
+                    url: '/angular/home',
+                    templateUrl: '@Url.Action("Home", "Angular")',
+                    controller: 'HomeController as home',
+                    data: { pageTitle: 'HOME' }
+                })
+                .state('about', {
+                    url: '/angular/about',
+                    templateUrl: '@Url.Action("About")',
+                    controller: 'AboutController as about',
+                    data: { pageTitle: 'ABOUT' }
+                });
+        }
+
+        app.config(config);
+
+        // angular controllers
+        app.controller("MainController", MainController);
+        app.controller("HomeController", HomeController);
+        app.controller("AboutController", AboutController);
+
+
+
+        // Controller Functions
+        function MainController($scope) {
+            console.log("HELLO ANGULARJS");
+        }
+
+        function HomeController() {
+            this.subTitle = "This is home";
+        }
+
+        function AboutController() {
+            this.subTitle = "This is about";
+        }
+
+    </script>
+}
